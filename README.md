@@ -87,19 +87,19 @@ Create a file named .env in the root directory of the project and add the follow
 
 # --- AI & Database Keys ---
 
-# Get this from: [https://aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
+Get this from: [https://aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
 
 GEMINI_API_KEY="your-gemini-api-key-here"
 
-# Get this from: [https://app.pinecone.io/](https://app.pinecone.io/) (Required for Cloud DB deployments)
+Get this from: [https://app.pinecone.io/](https://app.pinecone.io/) (Required for Cloud DB deployments)
 
 PINECONE_API_KEY="your-pinecone-api-key-here"
 
-# --- Environment Configuration ---
+--- Environment Configuration ---
 
 ENVIRONMENT="development"
 
-# CRITICAL: Forces HuggingFace to use local cache. Prevents timeout errors on strict Wi-Fi.
+CRITICAL: Forces HuggingFace to use local cache. Prevents timeout errors on strict Wi-Fi.
 
 HF_HUB_OFFLINE="1"
 
