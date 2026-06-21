@@ -20,7 +20,7 @@ class PostEventMemory:
             # FIX: Bypassing Google's buggy embedding endpoint.
             # 'all-mpnet-base-v2' is a rock-solid local model that outputs exactly 768 dimensions
             # meaning it perfectly matches your existing Pinecone index!
-            self.embeddings = HuggingFaceEmbeddings(model_name="all-mpnet-base-v2")
+            self.embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
             self.vector_store = PineconeVectorStore(
                 index_name=self.index_name,
                 embedding=self.embeddings
