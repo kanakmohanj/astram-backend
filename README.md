@@ -85,19 +85,33 @@ pip install fastapi uvicorn xgboost pandas langchain langgraph google-generative
 
 Create a file named .env in the root directory of the project and add the following:
 
+# --- AI & Database Keys ---
+
 # Get this from: [https://aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)
 
 GEMINI_API_KEY="your-gemini-api-key-here"
 
-# Current Environment Status
+# Get this from: [https://app.pinecone.io/](https://app.pinecone.io/) (Required for Cloud DB deployments)
+
+PINECONE_API_KEY="your-pinecone-api-key-here"
+
+# --- Environment Configuration ---
 
 ENVIRONMENT="development"
 
-# CRITICAL: Forces HuggingFace to use local cache. Prevents timeout errors.
+# CRITICAL: Forces HuggingFace to use local cache. Prevents timeout errors on strict Wi-Fi.
 
 HF_HUB_OFFLINE="1"
 
-### Step 5: Run the Server
+### Step 5: Train the Offline ML Model
+
+Before starting the server, you must generate the XGBoost forecasting model locally. Run the offline training script:
+
+python train_offline.py
+
+(This will read your historical dataset, train the model, and save the binary weights to your disk so FastAPI can load them into RAM).
+
+### Step 6: Run the Server
 
 uvicorn app.main:app --reload
 
