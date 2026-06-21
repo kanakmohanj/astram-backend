@@ -1,0 +1,19 @@
+# Environments
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local Vector Database (Too large for GitHub)
+faiss_astram_memory/
+
+# OS generated files
+.DS_Store
+Thumbs.dbgit
