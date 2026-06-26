@@ -1,7 +1,7 @@
 import os
 from typing import List, Dict, Any
-# Use HuggingFace for robust, free local embeddings
-from langchain_huggingface import HuggingFaceEmbeddings
+# 1. Swapped HuggingFace for Google Gemini Embeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from langchain_core.documents import Document
 
@@ -14,13 +14,14 @@ class PostEventMemory:
 
     def _initialize_db(self):
         """
-        Lazy initialization. Connects to Pinecone using a 768-dimension local embedding model.
+        Lazy initialization. Connects to Pinecone using Google Gemini Cloud Embeddings.
+        Note: models/embedding-001 outputs exactly 768 dimensions.
         """
         if self.vector_store is None:
-            # FIX: Bypassing Google's buggy embedding endpoint.
-            # 'all-mpnet-base-v2' is a rock-solid local model that outputs exactly 768 dimensions
-            # meaning it perfectly matches your existing Pinecone index!
-            self.embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+            # 2. Replaced HuggingFace with Google Generative AI
+            self.embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-2",
+                output_dimensionality=384)
+            
             self.vector_store = PineconeVectorStore(
                 index_name=self.index_name,
                 embedding=self.embeddings
@@ -71,7 +72,6 @@ class PostEventMemory:
         
         try:
             # Perform similarity search in Pinecone
-            
             results = self.vector_store.similarity_search(query_text, k=k)
             
             for doc in results:
@@ -86,17 +86,15 @@ class PostEventMemory:
             # Protects the API if Pinecone is down, keys are wrong, or index is missing
             print(f"⚠️ Pinecone Vector search bypassed (Network error or uninitialized index): {e}")
             return []
-            
+        
         return extracted_history
-
-# Singleton instance
+# Initialize the singleton instance for the rest of the app to use
 memory_bank = PostEventMemory()
-
-# # backend/app/services/rag_memory/retriever.py
 
 # import os
 # from typing import List, Dict, Any
-# from langchain_google_genai import GoogleGenerativeAIEmbeddings
+# # Use HuggingFace for robust, free local embeddings
+# from langchain_huggingface import HuggingFaceEmbeddings
 # from langchain_pinecone import PineconeVectorStore
 # from langchain_core.documents import Document
 
@@ -109,11 +107,13 @@ memory_bank = PostEventMemory()
 
 #     def _initialize_db(self):
 #         """
-#         Lazy initialization. Ensures OPENAI_API_KEY and PINECONE_API_KEY 
-#         are fully loaded in the environment before connecting to the cloud.
+#         Lazy initialization. Connects to Pinecone using a 768-dimension local embedding model.
 #         """
 #         if self.vector_store is None:
-#             self.embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+#             # FIX: Bypassing Google's buggy embedding endpoint.
+#             # 'all-mpnet-base-v2' is a rock-solid local model that outputs exactly 768 dimensions
+#             # meaning it perfectly matches your existing Pinecone index!
+#             self.embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 #             self.vector_store = PineconeVectorStore(
 #                 index_name=self.index_name,
 #                 embedding=self.embeddings
@@ -164,6 +164,7 @@ memory_bank = PostEventMemory()
         
 #         try:
 #             # Perform similarity search in Pinecone
+            
 #             results = self.vector_store.similarity_search(query_text, k=k)
             
 #             for doc in results:
@@ -180,6 +181,3 @@ memory_bank = PostEventMemory()
 #             return []
             
 #         return extracted_history
-
-# # Singleton instance
-# memory_bank = PostEventMemory()

@@ -111,7 +111,7 @@ def historical_context_node(state: AgentState) -> AgentState:
 
 def llm_planner_node(state: AgentState) -> AgentState:
     """Node 4: Generates the natural language brief"""
-    llm = ChatGoogleGenerativeAI(model="gemini-3.1-flash-lite", temperature=0.2)
+    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.2)
     
     # Safely extract the top route, checking for the single-node / no-path error dict
     top_route_info = "None available"
