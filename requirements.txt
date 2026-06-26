@@ -128,3 +128,4 @@ scikit-learn
 websockets
 pydantic
 pydantic-settings
+cachetools
